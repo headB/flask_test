@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,render_template
 
 ##创建一个Flask示例,并且给定初始化参数
 app = Flask(__name__)
@@ -11,6 +11,16 @@ def index():
 
     return "<h1>hello world!but the way,it's so like php!</h1>"
 
+@app.route('/user/<name>')
+def username(name):
+    return "<h1>hello %s!</h1>" %name
+
+
+##测试静态文件!
+@app.route("/test")
+def test_templates():
+    dict1 = {"name":"kumanxuan"}
+    return render_template('index.html',name=dict1)
 
 if __name__ == "__main__":
     app.run(debug=True)
