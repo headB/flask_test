@@ -1,7 +1,11 @@
 from flask import Flask,render_template
+from flask.ext.bootstrap import Bootstrap
+
 
 ##创建一个Flask示例,并且给定初始化参数
 app = Flask(__name__)
+
+bootstrap = Bootstrap()
 
 ##定义第一个视图
 ##传智说过,视图+url处理就是一个web框架了.!!模板渲染是附加的功能!
