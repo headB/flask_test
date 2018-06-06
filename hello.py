@@ -1,6 +1,19 @@
 from flask import Flask,render_template
-from flask.ext.bootstrap import Bootstrap
+#Importing flask.ext.bootstrap is deprecated, use flask_bootstrap instead.
+#from flask.ext.bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap
+#from flask.ext.wtf import From 
+from wtforms import Form,StringField,SubmitField
+from wtforms.validators import Required
 
+##为表单添加的模块或者函数
+from flask import session,redirect,url_for,flash
+
+##测试加入表单,不过表单应该是写在模板里面?
+
+class NameForm(Form):
+    name = StringField("what is you name?",validators=[Required()])
+    submit = SubmitField('Submit')
 
 ##创建一个Flask示例,并且给定初始化参数
 app = Flask(__name__)
@@ -25,6 +38,15 @@ def username(name):
 def test_templates():
     dict1 = {"name":"kumanxuan"}
     return render_template('index.html',name=dict1)
+
+##测试第二个模板渲染
+@app.route("/test_temp")
+def test2_templates():
+    form = NameForm
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,16 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>测试Flask</title>
-</head>
-<body>
-    
+{%extends "base.html"%}
+
+{%block title%}{{super()}}测试模板继承!{%endblock%}
+    {%block body%}
     <center>测试测试!这里是Flask,my name is {{name}}</center>
 
-    <img width="1910" height="600" src="" >
+    <img width="1910" height="600" src="templates/timg.jpg" >
 
-</body>
-</html>
+{%endblock%}
