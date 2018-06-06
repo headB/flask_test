@@ -6,6 +6,11 @@ from flask_bootstrap import Bootstrap
 from wtforms import Form,StringField,SubmitField
 from wtforms.validators import Required
 
+##尝试引入flask-script
+from flask.ext.script import Manager
+
+
+
 ##为表单添加的模块或者函数
 from flask import session,redirect,url_for,flash
 
@@ -18,7 +23,9 @@ class NameForm(Form):
 ##创建一个Flask示例,并且给定初始化参数
 app = Flask(__name__)
 
-bootstrap = Bootstrap()
+bootstrap = Bootstrap(app)
+
+manager = Manager(app)
 
 ##定义第一个视图
 ##传智说过,视图+url处理就是一个web框架了.!!模板渲染是附加的功能!
@@ -46,7 +53,14 @@ def test2_templates():
 
 
 
+##测试bootstrap模板
+@app.route("/boot_test")
+def boot_test():
+    return render_template('boot_base.html')
+
+
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    #app.run(debug=True)
+    manager.run()
