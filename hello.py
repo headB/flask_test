@@ -32,12 +32,13 @@ manager = Manager(app)
 
 @app.route("/")
 def index():
-
-    return "<h1>hello world!but the way,it's so like php!</h1>"
+    return render_template('index.html')
+    #return "<h1>hello world!but the way,it's so like php!</h1>"
 
 @app.route('/user/<name>')
 def username(name):
-    return "<h1>hello %s!</h1>" %name
+    #return "<h1>hello %s!</h1>" %name
+    return render_template('index.html')
 
 
 ##测试静态文件!
@@ -58,7 +59,15 @@ def test2_templates():
 def boot_test():
     return render_template('boot_base.html')
 
-
+##测试表单!
+@app.route("/test_form")
+def test_form():
+    name = None
+    form = NameForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        form.name.data = ''
+    return render_template('login.html',form=form,name=name)
 
 
 if __name__ == "__main__":

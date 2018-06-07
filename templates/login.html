@@ -1,6 +1,15 @@
-<form method="POST" >
-{{form.hidden_tag()}}
-{{form.name.label}} {{form.name()}}
-{{form.submit()}}
+{%extends "base.html"%}
+<!-- 导入wtf.html之前,当然是先导入基本类先.! -->
+{%import "bootstrap/wtf.html" as wtf%}
 
-</form>
+{%block title%}我是过来测试表单的{%endblock%}
+
+
+{%block page_content %}
+
+<div class="page-header">
+    <h1>正在测试表单!</h1>
+</div>
+{{wtf.quick_form(form)}}
+
+{%endblock%}
