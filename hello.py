@@ -56,12 +56,20 @@ def test_templates():
 def test2_templates():
     form = NameForm
 
-
+##测试base.html里面的静态内容.
+@app.route("/test_base")
+def test_base():
+    return render_template('base.html')
 
 ##测试bootstrap模板
 @app.route("/boot_test")
 def boot_test():
     return render_template('boot_base.html')
+
+##测试没有继承管理的模板
+@app.route("/test_no_extends")
+def test_no_extends():
+    return render_template('no_extends.html')
 
 ##测试表单!
 @app.route("/test_form",methods=['GET','POST'])
