@@ -3,11 +3,13 @@ from flask import Flask,render_template
 #from flask.ext.bootstrap import Bootstrap
 from flask_bootstrap import Bootstrap
 #from flask.ext.wtf import From 
-from wtforms import Form,StringField,SubmitField
+from wtforms import StringField,SubmitField
+from flask_wtf import Form
 from wtforms.validators import Required
 
 ##尝试引入flask-script
 from flask.ext.script import Manager
+
 
 
 
@@ -17,11 +19,13 @@ from flask import session,redirect,url_for,flash
 ##测试加入表单,不过表单应该是写在模板里面?
 
 class NameForm(Form):
-    name = StringField("what is you name?",validators=[Required()])
+    name = StringField('What is your name?', validators=[Required()])
     submit = SubmitField('Submit')
 
 ##创建一个Flask示例,并且给定初始化参数
 app = Flask(__name__)
+##需要全局设置一个csrf
+app.config['SECRET_KEY'] = 'hard to guess string'
 
 bootstrap = Bootstrap(app)
 
@@ -60,10 +64,12 @@ def boot_test():
     return render_template('boot_base.html')
 
 ##测试表单!
-@app.route("/test_form")
+@app.route("/test_form",methods=['GET','POST'])
 def test_form():
     name = None
     form = NameForm()
+    #print(form.name)
+    #print(form)
     if form.validate_on_submit():
         name = form.name.data
         form.name.data = ''

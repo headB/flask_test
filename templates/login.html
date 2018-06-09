@@ -1,15 +1,18 @@
-{%extends "base.html"%}
+{% extends "base.html" %}
 <!-- 导入wtf.html之前,当然是先导入基本类先.! -->
-{%import "bootstrap/wtf.html" as wtf%}
+{% import "bootstrap/wtf.html" as wtf %}
 
-{%block title%}我是过来测试表单的{%endblock%}
+{%block title%}我是过来测试表单的为什么不输出我??{%endblock%}
 
 
 {%block page_content %}
 
 <div class="page-header">
     <h1>正在测试表单!</h1>
+    为什么不输出我??
 </div>
-{{wtf.quick_form(form)}}
 
+
+{{ wtf.quick_form(form) }}
+啊实打实的
 {%endblock%}
