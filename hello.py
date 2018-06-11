@@ -16,11 +16,7 @@ from flask.ext.script import Manager
 ##为表单添加的模块或者函数
 from flask import session,redirect,url_for,flash
 
-##测试加入表单,不过表单应该是写在模板里面?
 
-class NameForm(Form):
-    name = StringField('What is your name?', validators=[Required()])
-    submit = SubmitField('Submit')
 
 ##创建一个Flask示例,并且给定初始化参数
 app = Flask(__name__)
@@ -72,12 +68,18 @@ def test_no_extends():
     return render_template('no_extends.html')
 
 ##测试表单!
+##测试加入表单,不过表单应该是写在模板里面?
+
+class NameForm(Form):
+    name = StringField('What is your name?', validators=[Required()],render_kw={'placeholder':'请输入你的名字!?'})
+    submit = SubmitField('点击提交!',)
+
 @app.route("/test_form",methods=['GET','POST'])
 def test_form():
+
+    
     name = None
     form = NameForm()
-    #print(form.name)
-    #print(form)
     if form.validate_on_submit():
         name = form.name.data
         form.name.data = ''

@@ -12,12 +12,12 @@
 </div>
 
 
-{#{ wtf.quick_form(form) }#}
+{{ wtf.quick_form(form) }}
 
-<form >
-{{form.name.label}}{{form.name()}}
-{{form.submit()}}
+<!-- <form > -->
+{#{form.name.label}}{{form.name()}#}
+{#{form.submit()}#}
 
-</form>
+<!-- </form> -->
 
 {%endblock%}
