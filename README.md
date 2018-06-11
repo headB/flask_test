@@ -167,5 +167,14 @@
             name = StringField('What is your name?', validators=[Required()],render_kw={'placeholder':'请输入你的名字!?'})
                 submit = SubmitField('点击提交!')
             ```
+        2. 自行编写代码解决 WTForm 无纯 Button 按钮的问题——input篇
+        > 当然这样的设计与该库本身立足于页面表单功能是紧密相连的。对于表单来说，按钮的最大功能就是提交表单。然而，我们并不能排除在一个表单中存在多个按钮，用于提供不同功能的情况。所以，单纯的 SubmitField 所实现的提交按钮就显得非常局限。此时，我们就需要利用 WTForm 提供的自定义 Field 和 Widget 功能，自己编写代码，来实现自己想要的按钮功能。
+
+        https://blog.csdn.net/tiwoo/article/details/46038249
+
+        3. 修改quick.form
+        ```python
+        {{ _wtf4.quick_form(form, form_type="basic ", button_map={'submit':'primary', } ) }}
+        ```
 
 
