@@ -12,6 +12,12 @@
 </div>
 
 
-{{ wtf.quick_form(form) }}
-啊实打实的
+{#{ wtf.quick_form(form) }#}
+
+<form >
+{{form.name.label}}{{form.name()}}
+{{form.submit()}}
+
+</form>
+
 {%endblock%}
