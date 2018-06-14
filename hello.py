@@ -11,6 +11,10 @@ from wtforms.validators import Required
 ##尝试引入flask-script
 from flask.ext.script import Manager
 
+##导入nav
+from flask_nav import Nav
+from flask_nav.elements import *
+
 
 
 
@@ -28,13 +32,24 @@ bootstrap = Bootstrap(app)
 
 manager = Manager(app)
 
+nav = Nav()
+
+nav.register_element('top',Navbar(u'flask入门',View(u'你好',''),
+View(u'我是测试表单','test_form'),
+View(u'测试模板渲染 ','test_temp'),))
+
+##初始化一个nav
+nav.init_app(app)
+
+##上面导入了一个manger,用于其他方式去载入flask
+
 ##定义第一个视图
 ##传智说过,视图+url处理就是一个web框架了.!!模板渲染是附加的功能!
 
 @app.route("/")
 def index():
     return render_template('index.html')
-    #return "<h1>hello world!but the way,it's so like php!</h1>"
+#return "<h1>hello world!but the way,it's so like php!</h1>"
 
 @app.route('/user/<name>')
 def username(name):
@@ -84,9 +99,9 @@ def test_form():
     if form.validate_on_submit():
         name = form.name.data
         form.name.data = ''
-    return render_template('test_form.html',form=form,name=name)
+    return render_template('login.html',name=name,form=form)
 
 
 if __name__ == "__main__":
-    #app.run(debug=True)
-    manager.run()
+    app.run(debug=True)
+    #manager.run()
