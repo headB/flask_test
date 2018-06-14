@@ -34,9 +34,9 @@ manager = Manager(app)
 
 nav = Nav()
 
-nav.register_element('top',Navbar(u'flask入门',View(u'你好',''),
+nav.register_element('top',Navbar(u'flask入门',View(u'你好','test_base'),
 View(u'我是测试表单','test_form'),
-View(u'测试模板渲染 ','test_temp'),))
+View(u'测试模板渲染 ','test_form'),))
 
 ##初始化一个nav
 nav.init_app(app)
@@ -99,7 +99,7 @@ def test_form():
     if form.validate_on_submit():
         name = form.name.data
         form.name.data = ''
-    return render_template('login.html',name=name,form=form)
+    return render_template('test_form.html',name=name,form=form)
 
 
 if __name__ == "__main__":
