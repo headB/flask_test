@@ -1,7 +1,36 @@
 {%extends 'bootstrap/base.html'%}
 
-{%block meta%}
+{%block metas%}
+{{super()}}
     <link rel="shortcut icon" href="{{url_for('static',filename='favicon.ico')}}" type="image/x-icon">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+{%endblock%}
+
+{%block styles%}
+{{super()}}
+<style>
+    
+    .container{
+        display:table;
+        height:100%;
+    }
+
+    .row{
+        display: table-cell;
+        vertical-align: middle;
+    }
+    /* centered columns styles */
+    .row-centered {
+        text-align:center;
+    }
+    .col-centered {
+        display:inline-block;
+        float:none;
+        text-align:left;
+        margin-right:-4px;
+    }
+</style>
+
 {%endblock%}
 
 {%block body%}
@@ -11,12 +40,6 @@
 <div class="navbar navbar-inverse" role="navigation">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
              <a class="navbar-brand" href="/">Flasky</a>
         </div>
 
@@ -25,6 +48,8 @@
         <li><a href="/">Home</a></li>
         </ul>
     </div>
+
+
     
     </div>
     </div>
@@ -37,5 +62,3 @@
 
 {%endblock%}
     
-</body>
-</html>

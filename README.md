@@ -54,6 +54,34 @@
 
 
 2. 模板
+    1. 
+    2. jinja2变量过滤器
+    ```python
+    过滤器名    说　　明
+    safe        渲染值时不转义
+    capitalize  把值的首字母转换成大写，其他字母转换成小写
+    lower       把值转换成小写形式
+    upper       把值转换成大写形式
+    title       把值中每个单词的首字母都转换成大写
+    trim        把值的首尾空格去掉
+    striptags   渲染之前把值中所有的HTML 标签都删掉
+    ```
+    3. Flask-Bootstrap基模板中定义的块
+    ```python
+    块　　名    说　　明
+    doc             整个HTML 文档
+    html_attribs    <html> 标签的属性
+    html <html>     标签中的内容
+    head <head>     标签中的内容
+    title <title>   标签中的内容
+    metas           一组<meta> 标签
+    styles          层叠样式表定义
+    body_attribs    <body> 标签的属性
+    body            <body> 标签中的内容
+    navbar          用户定义的导航条
+    content         用户定义的页面内容
+    scripts         文档底部的JavaScript 声明
+    ```
 
 3. web表单
     1. 跨站请求伪造保护

@@ -5,6 +5,7 @@ from flask_bootstrap import Bootstrap
 #from flask.ext.wtf import From 
 from wtforms import StringField,SubmitField
 from flask_wtf import Form
+#import flask_wtf import FlaskForm
 from wtforms.validators import Required
 
 ##尝试引入flask-script
@@ -72,7 +73,7 @@ def test_no_extends():
 
 class NameForm(Form):
     name = StringField('What is your name?', validators=[Required()],render_kw={'placeholder':'请输入你的名字!?'})
-    submit = SubmitField('点击提交!',)
+    submit = SubmitField('点击提交!')
 
 @app.route("/test_form",methods=['GET','POST'])
 def test_form():
@@ -83,7 +84,7 @@ def test_form():
     if form.validate_on_submit():
         name = form.name.data
         form.name.data = ''
-    return render_template('login.html',form=form,name=name)
+    return render_template('test_form.html',form=form,name=name)
 
 
 if __name__ == "__main__":

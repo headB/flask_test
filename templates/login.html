@@ -1,23 +1,25 @@
-{% extends "base.html" %}
-<!-- 导入wtf.html之前,当然是先导入基本类先.! -->
-{% import "bootstrap/wtf.html" as wtf %}
+{%extends 'base.html'%}
+        
+        {%block title%}{%endblock%}
+    
 
-{%block title%}我是过来测试表单的为什么不输出我??{%endblock%}
+  {%block body%}
+
+ 
+
+        <div class="container">
+            <div class="row row-centered">
+                <div class="well col-md-6 col-centered">
+                    <h2>欢迎登录</h2>
+                   
+                </div>
+            </div>
+        </div>
 
 
-{%block page_content %}
+        <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+        <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
 
-<div class="page-header">
-    <h1>正在测试表单!</h1>
-</div>
-
-
-{{ wtf.quick_form(form,button_map={'submit':'primary'}) }}
-
-<!-- <form > -->
-{#{form.name.label}}{{form.name()}#}
-{#{form.submit()}#}
-
-<!-- </form> -->
-
-{%endblock%}
+        <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+        <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    {%endblock%}
