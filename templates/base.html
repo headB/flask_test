@@ -33,44 +33,13 @@
 
 {%endblock%}
 
-{%block body%}
-
-{#%block navbar%#}
-
-<!-- <div class="navbar navbar-inverse" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-             <a class="navbar-brand" href="/">Flasky</a>
-        </div>
-
-    <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
-        <li><a href="/">Home</a></li>
-        </ul>
-    </div>
-
-
-    
-    </div>
-    </div> -->
-
-
-
-{#%endblock%#}
 
 {#在这里抛弃nav,准备搞自己一个新开nav.但是,如何应用到全局呢???#}
 {#我知道,你不是没有看到,这些东东都是在开头加载的,都是app=xxx,或者xxx(app)这样加载的!!#}
 
+
 {%block navbar%}
-
 {{nav.top.render()}}
-
 {%endblock%}
 
-
-{%block   page_content  %}
-
-{%endblock%}
-
-{%endblock%}
     

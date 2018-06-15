@@ -34,8 +34,8 @@ manager = Manager(app)
 
 nav = Nav()
 
-nav.register_element('top',Navbar(u'flask入门',View(u'你好','test_base'),
-View(u'我是测试表单','test_form'),
+nav.register_element('top',Navbar(u'flask入门',View(u'你好','test_templates'),
+View(u'我是测试表单','test_base'),
 View(u'测试模板渲染 ','test_form'),))
 
 ##初始化一个nav
@@ -91,9 +91,7 @@ class NameForm(Form):
     submit = SubmitField('点击提交!')
 
 @app.route("/test_form",methods=['GET','POST'])
-def test_form():
-
-    
+def test_form():  
     name = None
     form = NameForm()
     if form.validate_on_submit():

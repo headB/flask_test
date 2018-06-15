@@ -1,9 +1,13 @@
 {%extends "base.html"%}
 
 {%block title%}{{super()}}测试模板继承!{%endblock%}
+
+
+
     {%block body%}
+    {{super()}}
     <center>测试测试!这里是Flask,my name is {{name}}</center>
 
     <img width="1910" height="600" src="static/timg.jpg" >
 
-{%endblock%}
+{%endblock%}    
