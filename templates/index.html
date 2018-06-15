@@ -8,6 +8,8 @@
     {{super()}}
     <center>测试测试!这里是Flask,my name is {{name}}</center>
 
-    <img width="1910" height="600" src="static/timg.jpg" >
-
+    {#做一个自适应窗口大小的图片,但是如果我是想按比例呢??百度一下先.#}
+<div style="width:800px;height:600px;margin:0 auto;" >
+    <img style="width:auto;height:auto;max-height:100%;max-width:100%" alt="图片比例最好还是800X600大小!" title="图片比例最好还是800X600大小!"  src="static/timg.jpg" >
+</div>
 {%endblock%}    
