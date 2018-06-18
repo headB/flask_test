@@ -1,8 +1,15 @@
 {% extends 'base.html' %}
 
+{% import 'bootstrap/wtf.html' as wtf %}
+
 {%block title%}我这里是测试表单用的{%endblock%}
 
 
 {#在这里抛弃nav,准备搞自己一个新开nav.但是,如何应用到全局呢???#}
 {#我知道,你不是没有看到,这些东东都是在开头加载的,都是app=xxx,或者xxx(app)这样加载的!!#}
 
+{#重新写表单#}
+
+{% block content %}
+{{ wtf.quick_form(form) }}
+{%endblock%}
