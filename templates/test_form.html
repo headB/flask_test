@@ -10,6 +10,11 @@
 
 {#重新写表单#}
 
+
 {% block content %}
-{{ wtf.quick_form(form) }}
+
+<div style="width:30%;margin:0 auto" >
+{{ wtf.quick_form(form,button_map={'submit':'primary', })}}
+
+</div>
 {%endblock%}
