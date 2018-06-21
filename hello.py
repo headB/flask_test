@@ -9,7 +9,8 @@ from flask_wtf import Form
 from wtforms.validators import Required
 
 ##尝试引入flask-script
-from flask.ext.script import Manager
+#from flask.ext.script import Manager
+from flask_script import Manager
 
 ##导入nav
 from flask_nav import Nav
