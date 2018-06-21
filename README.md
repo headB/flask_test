@@ -206,3 +206,166 @@
         ```
 
 
+
+
+
+    4. 数据库
+        1. 使用Flask-SQLAchemy管理数据库
+        Flask-SQLAlchemy 是一个 Flask 扩展,简化了在 Flask 程序中使用 SQLAlchemy 的操作。
+        SQLAlchemy 是一个很强大的关系型数据库框架,支持多种数据库后台。SQLAlchemy 提
+        供了高层 ORM,也提供了使用数据库原生 SQL 的低层功能。
+        和其他大多数扩展一样,Flask-SQLAlchemy 也使用 pip 安装:
+        (venv) $ pip install flask-sqlalchemy
+        2. FLask-SQLAlchemy数据库URL
+        >MySQL mysql://username:password@hostname/database
+        Postgres postgresql://username:password@hostname/database
+        SQLite(Unix) sqlite:////absolute/path/to/database
+        SQLite(Windows) sqlite:///c:/absolute/path/to/database
+
+        3. 示例
+        ```python
+        from flask.ext.sqlalchemy import SQLAlchemy
+        basedir = os.path.abspath(os.path.dirname(__file__))
+        app = Flask(__name__)
+        app.config['SQLALCHEMY_DATABASE_URI'] =\
+        'sqlite:///' + os.path.join(basedir, 'data.sqlite')
+        app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
+        db = SQLAlchemy(app)
+        #db 对象是 SQLAlchemy 类的实例,表示程序使用的数据库,同时还获得了 Flask-SQLAlchemy
+        #提供的所有功能。
+        ```
+
+        4. 定义模型。
+        >模型这个术语表示程序使用的持久化实体。在 ORM 中,模型一般是一个 Python 类,类中
+        的属性对应数据库表中的列。
+        Flask-SQLAlchemy 创建的数据库实例为模型提供了一个基类以及一系列辅助类和辅助函
+        数,可用于定义模型的结构。图 5-1 中的 roles 表和 users 表可定义为模型 Role 和 User ,
+        如示例 5-2 所示。
+        ```python
+        class Role(db.Model):
+        __tablename__ = 'roles'
+        id = db.Column(db.Integer, primary_key=True)
+        name = db.Column(db.String(64), unique=True)
+            def __repr__(self):
+                return '<Role % r>' % self.name
+        class User(db.Model):
+        __tablename__ = 'users'
+        id = db.Column(db.Integer, primary_key=True)
+        username = db.Column(db.String(64), unique=True, index=True)
+            def __repr__(self):
+                return '<User % r>' % self.username
+        #类变量 __tablename__ 定义在数据库中使用的表名。如果没有定义 __tablename__ ,Flask-
+        #数据库 | 47SQLAlchemy 会使用一个默认名字,但默认的表名没有遵守使用复数形式进行命名的约定,
+        #所以最好由我们自己来指定表名。其余的类变量都是该模型的属性,被定义为 db.Column
+        #类的实例。
+        #db.Column 类构造函数的第一个参数是数据库列和模型属性的类型。表 5-2 列出了一些可用
+        #的列类型以及在模型中使用的 Python 类型。
+        ```
+
+        最常用的SQLAlchemy列类型
+        ```python
+        类型名          Python类型      说明
+        Integer         int     普通整数,一般是 32 位
+        SmallInteger    int    取值范围小的整数,一般是 16 位
+        BigInteger      int 或 long     不限制精度的整数
+        Float           float 浮点数
+        Numeric decimal.Decimal     定点数
+        String          str    变长字符串
+        Text            str     变长字符串,对较长或不限长度的字符串做了优化
+        Unicode         unicode 变长 Unicode 字符串
+        UnicodeText     unicode 变长 Unicode 字符串,对较长或不限长度的字符串做了优化
+        Boolean         bool 布尔值
+        Date            datetime.date 日期
+        Time             datetime.time 时间
+        DateTime        datetime.datetime 日期和时间
+        Interval        datetime.timedelta 时间间隔
+        Enum            str 一组字符串
+        PickleType      任何 Python 对象 自动使用 Pickle 序列化
+        LargeBinary     str 二进制文件
+        ```
+
+        最常使用的SQLAlchemy列选项
+        ```python
+        选项名         说明
+        primary_key   如果设为 True ,这列就是表的主键
+        unique        如果设为     True ,这列不允许出现重复的值
+        index         如果设为   True ,为这列创建索引,提升查询效率
+        nullable      如果设为   True ,这列允许使用空值;如果设为 False ,这列不允许使用空值
+        default       为这列定义默认值
+
+        ```
+        5. 创建表
+        首先,我们要让 Flask-SQLAlchemy 根据模型类创建数据库。方法是使用 db.create_all()
+        函数:
+        (venv) $ python hello.py shell
+        >>> from hello import db
+        >>> db.create_all()
+        如果你查看程序目录,会发现新建了一个名为 data.sqlite 的文件。这个 SQLite 数据库文件
+        的名字就是在配置中指定的。如果数据库表已经存在于数据库中,那么 db.create_all()
+        不会重新创建或者更新这个表。如果修改模型后要把改动应用到现有的数据库中,这一特
+        性会带来不便。更新现有数据库表的粗暴方式是先删除旧表再重新创建:
+        >>> db.drop_all()
+        >>> db.create_all()
+        50 | 第 5 章遗憾的是,这个方法有个我们不想看到的副作用,它把数据库中原有的数据都销毁了。本
+        章末尾将会介绍一种更好的方式用于更新数据库。
+
+        6. 插入行
+        下面这段代码创建了一些角色和用户:
+        >>>
+        >>>
+        >>>
+        >>>
+        >>>
+        >>>
+        >>>
+        from hello import Role, User
+        admin_role = Role(name='Admin')
+        mod_role = Role(name='Moderator')
+        user_role = Role(name='User')
+        user_john = User(username='john', role=admin_role)
+        user_susan = User(username='susan', role=user_role)
+        user_david = User(username='david', role=user_role)
+        模型的构造函数接受的参数是使用关键字参数指定的模型属性初始值。注意, role 属性也
+        可使用,虽然它不是真正的数据库列,但却是一对多关系的高级表示。这些新建对象的 id
+        属性并没有明确设定,因为主键是由 Flask-SQLAlchemy 管理的。现在这些对象只存在于
+        Python 中,还未写入数据库。因此 id 尚未赋值:
+        >>> print(admin_role.id)
+        None
+        >>> print(mod_role.id)
+        None
+        >>> print(user_role.id)
+        None
+        通过数据库会话管理对数据库所做的改动,在 Flask-SQLAlchemy 中,会话由 db.session
+        表示。准备把对象写入数据库之前,先要将其添加到会话中:
+        >>>
+        >>>
+        >>>
+        >>>
+        >>>
+        >>>
+        db.session.add(admin_role)
+        db.session.add(mod_role)
+        db.session.add(user_role)
+        db.session.add(user_john)
+        db.session.add(user_susan)
+        db.session.add(user_david)
+        或者简写成:
+        >>> db.session.add_all([admin_role, mod_role, user_role,
+        ...
+        user_john, user_susan, user_david])
+        为了把对象写入数据库,我们要调用 commit() 方法提交会话:
+        >>> db.session.commit()
+        再次查看 id 属性,现在它们已经赋值了:
+        数据库 | 51>>> print(admin_role.id)
+        1
+        >>> print(mod_role.id)
+        2
+        >>> print(user_role.id)
+        3
+        数据库会话 db.session 和第 4 章介绍的 Flask session 对象没有关系。数据库
+        会话也称为 事务 。
+        数据库会话能保证数据库的一致性。提交操作使用原子方式把会话中的对象全部写入数据
+        库。如果在写入会话的过程中发生了错误,整个会话都会失效。如果你始终把相关改动放
+        在会话中提交,就能避免因部分更新导致的数据库不一致性。
+        数据库会话也可 回滚 。调用 db.session.rollback() 后,添加到数据库会话
+        中的所有对象都会还原到它们在数据库时的状态。

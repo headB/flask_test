@@ -14,7 +14,8 @@
 {% block content %}
 <div>
         {% for message in get_flashed_messages() %}
-        <div style="width:50%;text-align: center;margin:0 auto"  class="alert alert-warning">
+
+        <div style="width:50%;text-align: center;margin:0 auto"  class="alert alert-success">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
         {{ message }}
         </div>

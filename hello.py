@@ -16,7 +16,10 @@ from flask_script import Manager
 from flask_nav import Nav
 from flask_nav.elements import *
 
-
+##尝试使用数据库，个人感觉比较喜欢用sqlite3
+from flask_sqlalchemy import SQLAlchemy
+import os
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 ##为表单添加的模块或者函数
@@ -41,6 +44,18 @@ View(u'测试表单 ','test_form'),))
 
 ##初始化一个nav
 nav.init_app(app)
+
+
+##编辑一下链接数据库的信息
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+os.path.join(basedir,'data.sqlite')
+app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
+db = SQLAlchemy(app)
+
+##定义模型
+class Admin(db.Model):
+    __tablename__ = 'admin'
+    id = db.Column(db.Integer,primary_key=True)
+    name = db.Column(db.String(64),unique=True)
 
 ##上面导入了一个manger,用于其他方式去载入flask
 
@@ -101,12 +116,12 @@ def test_form():
         #name = form.name.data
         #form.name.data = ''
         flash("你已经成功提交信息，请稍等！")
-        print(form)
+        #return redirect("http://www.baidu.com")
     else:
         flash("欢迎莅临本站点，你是第一次进入，请输入你需要注册的账号和密码！")
     return render_template('test_form.html',name=name,form=form)
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
-    #manager.run()
+    #app.run(debug=True)
+    manager.run()
