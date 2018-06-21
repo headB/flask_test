@@ -12,9 +12,19 @@
 
 
 {% block content %}
+<div>
+        {% for message in get_flashed_messages() %}
+        <div style="width:50%;text-align: center;margin:0 auto"  class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+        </div>
+        {% endfor %}
 
-<div style="width:30%;margin:0 auto" >
+    <div style="text-align: center" ><h2>叩丁狼教育-用户注册/登陆</h2></div>
+<div class="well" style="width:30%;margin:0 auto" >
 {{ wtf.quick_form(form,button_map={'submit':'primary', })}}
+
+</div>
 
 </div>
 {%endblock%}

@@ -1,9 +1,9 @@
-from flask import Flask,render_template
+from flask import Flask,render_template,flash
 #Importing flask.ext.bootstrap is deprecated, use flask_bootstrap instead.
 #from flask.ext.bootstrap import Bootstrap
 from flask_bootstrap import Bootstrap
 #from flask.ext.wtf import From 
-from wtforms import StringField,SubmitField
+from wtforms import StringField,SubmitField,PasswordField
 from flask_wtf import Form
 #import flask_wtf import FlaskForm
 from wtforms.validators import Required
@@ -88,7 +88,9 @@ def test_no_extends():
 ##测试加入表单,不过表单应该是写在模板里面?
 
 class NameForm(Form):
-    name = StringField('What is your name?', validators=[Required()],render_kw={'placeholder':'请输入你的名字!?'})
+    name = StringField('账号', validators=[Required()],render_kw={'placeholder':'请输入你的名字!?'})
+    password = PasswordField('密码',validators=[Required()],render_kw={"placeholder":"请输入密码"})
+    verityCode = StringField('验证码',validators=[Required()],render_kw={"placeholder":"请输入验证码","autocomplete":"off"})
     submit = SubmitField('点击提交!')
 
 @app.route("/test_form",methods=['GET','POST'])
@@ -96,8 +98,12 @@ def test_form():
     name = None
     form = NameForm()
     if form.validate_on_submit():
-        name = form.name.data
-        form.name.data = ''
+        #name = form.name.data
+        #form.name.data = ''
+        flash("你已经成功提交信息，请稍等！")
+        print(form)
+    else:
+        flash("欢迎莅临本站点，你是第一次进入，请输入你需要注册的账号和密码！")
     return render_template('test_form.html',name=name,form=form)
 
 
