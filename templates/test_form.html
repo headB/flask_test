@@ -26,6 +26,13 @@
 {{ wtf.quick_form(form,button_map={'submit':'primary', })}}
 
 </div>
-
+{%if admin_data%}
+<div style="text-align: center" >下面是在admin数据库里面存在的数据！
+{%for admins in  admin_data%}
+<p>name is {{admins.name}}</p>
+{% endfor %}
 </div>
+</div>
+{%endif%}
+
 {%endblock%}

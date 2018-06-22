@@ -3,7 +3,7 @@ from flask import Flask,render_template,flash
 #from flask.ext.bootstrap import Bootstrap
 from flask_bootstrap import Bootstrap
 #from flask.ext.wtf import From 
-from wtforms import StringField,SubmitField,PasswordField
+from wtforms import StringField,SubmitField,PasswordField,HiddenField
 from flask_wtf import Form
 #import flask_wtf import FlaskForm
 from wtforms.validators import Required
@@ -42,6 +42,7 @@ nav.register_element('top',Navbar(u'flask入门',View(u'你好','test_templates'
 View(u'栏目测试','test_base'),
 View(u'测试表单 ','test_form'),
 View(u'点击注册 ','register_form'),
+View(u'查看用户 ','user'),
 ))
 
 ##初始化一个nav
@@ -51,6 +52,7 @@ nav.init_app(app)
 ##编辑一下链接数据库的信息
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///'+os.path.join(basedir,'data.sqlite')
 app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 db = SQLAlchemy(app)
 
 ##定义模型
@@ -58,6 +60,7 @@ class Admin(db.Model):
     __tablename__ = 'admin'
     id = db.Column(db.Integer,primary_key=True)
     name = db.Column(db.String(64),unique=True)
+    password = db.Column(db.String(64))
 
 ##上面导入了一个manger,用于其他方式去载入flask
 
@@ -113,10 +116,20 @@ class NameForm(Form):
 class RegisterForm(NameForm):
     submit = SubmitField('点击注册!')
 
+class ModifiedRegister(NameForm):
+    id = HiddenField()
+    password = PasswordField('密码',render_kw={"placeholder":"不输入就表示不修改密码"})
+    verityCode = StringField('验证码',validators=[Required()],render_kw={"placeholder":"请输入验证码","autocomplete":"off"})
+    submit = SubmitField('点击修改!')
+
 @app.route("/test_form",methods=['GET','POST'])
 def test_form():  
     name = None
     form = NameForm()
+
+    ##获取指定admin表的数据。
+    admin_data = Admin().query.all()
+
     if form.validate_on_submit():
         #name = form.name.data
         #form.name.data = ''
@@ -124,20 +137,47 @@ def test_form():
         #return redirect("http://www.baidu.com")
     else:
         flash("欢迎莅临本站点，你是第一次进入，请输入你需要注册的账号和密码！")
-    return render_template('test_form.html',name=name,form=form)
+    return render_template('test_form.html',name=name,form=form,admin_data=admin_data)
 
 ##设置一个类似注册入库的函数
+##比较贪心，不过这里顺便设置一个如果获取到id，意味着需要修改对应id的数据。！
 @app.route('/register',methods=['GET','POST'])
 def register_form():
     form = RegisterForm()
+    id = request.args.get('id')
+    if id:
+        
+        admins = Admin().query.filter_by(id=id).first()
+
+        
+
+        if admins and request.method != "POST":
+            form = ModifiedRegister()
+            
+            form.name.data = admins.name
+            form.id.data = admins.id
+            
+            return render_template("register.html",form=form,operate="修改")
+        
+        elif request.method == "GET":
+            flash("你查询的数据，恩恩，是不存在的！")
+            return render_template("base.html")
+
+
     if form.validate_on_submit():
         #检测已经提交表单，检查参数
         flash("这里是首页！")
-        print(dir(form))
-        print(request.form['name'])
-        print(request.form['password'])
+
+        id = request.form.get("id")
+
+
+        if id:
+            admin = admins
+        else:
         
-        admin = Admin(name=request.form['name'])
+            admin = Admin(name=request.form['name'],password=request.form['password'])
+
+
 
         ##添加到回话中
 
@@ -147,7 +187,24 @@ def register_form():
 
         return render_template("base.html")
     else:
-        return render_template('register.html',form=form)
+        return render_template('register.html',form=form,operate="注册")
+
+##查看用户表数据
+@app.route("/user",methods=['GET','POST'])
+def user():
+    id = request.args.get('id')
+    if id:
+        object1 = Admin().query.filter_by(id=id).first()
+        if object1:
+            db.session.delete(object1)
+        else:
+            flash("没有该对象信息")
+
+    admin_data = Admin().query.all()
+    return render_template('user.html',admin_data=admin_data)
+
+
+
 
 if __name__ == "__main__":
     #app.run(debug=True)
