@@ -1,11 +1,11 @@
 from flask import Flask,render_template,flash
-#Importing flask.ext.bootstrap is deprecated, use flask_bootstrap instead.
 #from flask.ext.bootstrap import Bootstrap
 from flask_bootstrap import Bootstrap
 #from flask.ext.wtf import From 
 from wtforms import StringField,SubmitField,PasswordField,HiddenField
-from flask_wtf import Form
-#import flask_wtf import FlaskForm
+#from wtforms import *
+#from flask_wtf import Form
+from flask_wtf import FlaskForm
 from wtforms.validators import Required
 
 ##尝试引入flask-script
@@ -107,7 +107,7 @@ def test_no_extends():
 ##测试表单!
 ##测试加入表单,不过表单应该是写在模板里面?
 
-class NameForm(Form):
+class NameForm(FlaskForm):
     name = StringField('账号', validators=[Required()],render_kw={'placeholder':'请输入你的名字!?'})
     password = PasswordField('密码',validators=[Required()],render_kw={"placeholder":"请输入密码"})
     verityCode = StringField('验证码',validators=[Required()],render_kw={"placeholder":"请输入验证码","autocomplete":"off"})
@@ -149,10 +149,10 @@ def register_form():
         
         admins = Admin().query.filter_by(id=id).first()
 
-        
+        form = ModifiedRegister()
 
         if admins and request.method != "POST":
-            form = ModifiedRegister()
+            
             
             form.name.data = admins.name
             form.id.data = admins.id
@@ -162,30 +162,32 @@ def register_form():
         elif request.method == "GET":
             flash("你查询的数据，恩恩，是不存在的！")
             return render_template("base.html")
-
+        
 
     if form.validate_on_submit():
         #检测已经提交表单，检查参数
-        flash("这里是首页！")
 
         id = request.form.get("id")
 
 
         if id:
-            admin = admins
+            admins.name = form.name.data
+            if request.form.get("password"):
+                admins.password = request.form.get("password")
+            
+            db.session.add(admins)
         else:
         
             admin = Admin(name=request.form['name'],password=request.form['password'])
 
-
+            db.session.add(admin)
+            #提交
+            db.session.commit()
 
         ##添加到回话中
 
-        db.session.add(admin)
-        #提交
-        db.session.commit()
-
-        return render_template("base.html")
+        flash("数据验证并且提交成功！")
+        return render_template("user.html")
     else:
         return render_template('register.html',form=form,operate="注册")
 
