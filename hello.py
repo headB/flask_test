@@ -187,7 +187,8 @@ def register_form():
         ##添加到回话中
 
         flash("数据验证并且提交成功！")
-        return render_template("user.html")
+        #return render_template("user.html")
+        return redirect(url_for('user'))
     else:
         return render_template('register.html',form=form,operate="注册")
 
