@@ -42,4 +42,21 @@
 {{nav.top.render()}}
 {%endblock%}
 
+{%block content%}
+
+<center><h2>来自首页base的神奇问候!</h2>
+
+    {% for message in get_flashed_messages() %}
+
+    <div style="width:50%;text-align: center;margin:0 auto"  class="alert alert-success">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ message }}
+    </div>
+    {% endfor %}
+</center>
+
+
+
+{%endblock%}
+
     

@@ -40,7 +40,9 @@ nav = Nav()
 
 nav.register_element('top',Navbar(u'flask入门',View(u'你好','test_templates'),
 View(u'栏目测试','test_base'),
-View(u'测试表单 ','test_form'),))
+View(u'测试表单 ','test_form'),
+View(u'点击注册 ','register_form'),
+))
 
 ##初始化一个nav
 nav.init_app(app)
@@ -108,6 +110,9 @@ class NameForm(Form):
     verityCode = StringField('验证码',validators=[Required()],render_kw={"placeholder":"请输入验证码","autocomplete":"off"})
     submit = SubmitField('点击提交!')
 
+class RegisterForm(NameForm):
+    submit = SubmitField('点击注册!')
+
 @app.route("/test_form",methods=['GET','POST'])
 def test_form():  
     name = None
@@ -121,6 +126,28 @@ def test_form():
         flash("欢迎莅临本站点，你是第一次进入，请输入你需要注册的账号和密码！")
     return render_template('test_form.html',name=name,form=form)
 
+##设置一个类似注册入库的函数
+@app.route('/register',methods=['GET','POST'])
+def register_form():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        #检测已经提交表单，检查参数
+        flash("这里是首页！")
+        print(dir(form))
+        print(request.form['name'])
+        print(request.form['password'])
+        
+        admin = Admin(name=request.form['name'])
+
+        ##添加到回话中
+
+        db.session.add(admin)
+        #提交
+        db.session.commit()
+
+        return render_template("base.html")
+    else:
+        return render_template('register.html',form=form)
 
 if __name__ == "__main__":
     #app.run(debug=True)
