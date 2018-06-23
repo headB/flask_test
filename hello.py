@@ -6,7 +6,7 @@ from wtforms import StringField,SubmitField,PasswordField,HiddenField
 #from wtforms import *
 #from flask_wtf import Form
 from flask_wtf import FlaskForm
-from wtforms.validators import Required
+from wtforms.validators import Required,EqualTo
 
 ##尝试引入flask-script
 #from flask.ext.script import Manager
@@ -109,7 +109,8 @@ def test_no_extends():
 
 class NameForm(FlaskForm):
     name = StringField('账号', validators=[Required()],render_kw={'placeholder':'请输入你的名字!?'})
-    password = PasswordField('密码',validators=[Required()],render_kw={"placeholder":"请输入密码"})
+    password = PasswordField('密码',validators=[Required(),EqualTo('password2')],render_kw={"placeholder":"请输入密码"})
+    password2 = PasswordField('验证密码',validators=[Required()],render_kw={"placeholder":"请输入密码"})
     verityCode = StringField('验证码',validators=[Required()],render_kw={"placeholder":"请输入验证码","autocomplete":"off"})
     submit = SubmitField('点击提交!')
 
@@ -118,7 +119,8 @@ class RegisterForm(NameForm):
 
 class ModifiedRegister(NameForm):
     id = HiddenField()
-    password = PasswordField('密码',render_kw={"placeholder":"不输入就表示不修改密码"})
+    password = PasswordField('密码',validators=[EqualTo('password2')],render_kw={"placeholder":"不输入就表示不修改密码"})
+    password2 = PasswordField('验证密码',validators=[],render_kw={"placeholder":"请输入密码"})
     verityCode = StringField('验证码',validators=[Required()],render_kw={"placeholder":"请输入验证码","autocomplete":"off"})
     submit = SubmitField('点击修改!')
 
