@@ -208,7 +208,19 @@ def user():
     admin_data = Admin().query.all()
     return render_template('user.html',admin_data=admin_data)
 
+#测试验证码
+@app.route("/verify_code")
+def verify_code():
+    from test_verify import generate_verify
+    from flask import make_response
 
+    image_code = generate_verify()
+
+    response = make_response(image_code)
+
+    response.headers['Content-Type'] = "image/gif"
+    
+    return response
 
 
 if __name__ == "__main__":
