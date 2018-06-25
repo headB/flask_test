@@ -214,7 +214,9 @@ def verify_code():
     from test_verify import generate_verify
     from flask import make_response
 
-    image_code = generate_verify()
+    image_code,verify_str_code = generate_verify()
+
+    print(verify_str_code)
 
     response = make_response(image_code)
 
