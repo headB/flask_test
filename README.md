@@ -204,7 +204,12 @@
         ```python
         {{ _wtf4.quick_form(form, form_type="basic ", button_map={'submit':'primary', } ) }}
         ```
+        4. 关于quick.form 我想了解更多！
+        5. validators和直接validators。xx有什么区别
 
+        6. csrf的具体用法
+            1. 在app里面设置 app['SECRET_KEY'],然后在模板里面加入 form.csrf_token()
+            2. 
 
 
 
@@ -369,3 +374,6 @@
         在会话中提交,就能避免因部分更新导致的数据库不一致性。
         数据库会话也可 回滚 。调用 db.session.rollback() 后,添加到数据库会话
         中的所有对象都会还原到它们在数据库时的状态。
+
+
+    4. session

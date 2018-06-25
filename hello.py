@@ -1,4 +1,4 @@
-from flask import Flask,render_template,flash
+from flask import Flask,render_template,flash,session
 #from flask.ext.bootstrap import Bootstrap
 from flask_bootstrap import Bootstrap
 #from flask.ext.wtf import From 
@@ -6,7 +6,8 @@ from wtforms import StringField,SubmitField,PasswordField,HiddenField
 #from wtforms import *
 #from flask_wtf import Form
 from flask_wtf import FlaskForm
-from wtforms.validators import Required,EqualTo
+from wtforms.validators import Required,EqualTo,data_required
+from wtforms import validators
 
 ##尝试引入flask-script
 #from flask.ext.script import Manager
@@ -108,7 +109,7 @@ def test_no_extends():
 ##测试加入表单,不过表单应该是写在模板里面?
 
 class NameForm(FlaskForm):
-    name = StringField('账号', validators=[Required()],render_kw={'placeholder':'请输入你的名字!?'})
+    name = StringField('账号', validators=[validators.DataRequired(message="账号不能为空！")],render_kw={'placeholder':'请输入你的名字!?'})
     password = PasswordField('密码',validators=[Required(),EqualTo('password2')],render_kw={"placeholder":"请输入密码"})
     password2 = PasswordField('验证密码',validators=[Required()],render_kw={"placeholder":"请输入密码"})
     verityCode = StringField('验证码',validators=[Required()],render_kw={"placeholder":"请输入验证码","autocomplete":"off"})
@@ -118,7 +119,7 @@ class RegisterForm(NameForm):
     submit = SubmitField('点击注册!')
 
 class ModifiedRegister(NameForm):
-    id = HiddenField()
+    #id = HiddenField()
     password = PasswordField('密码',validators=[EqualTo('password2')],render_kw={"placeholder":"不输入就表示不修改密码"})
     password2 = PasswordField('验证密码',validators=[],render_kw={"placeholder":"请输入密码"})
     verityCode = StringField('验证码',validators=[Required()],render_kw={"placeholder":"请输入验证码","autocomplete":"off"})
@@ -216,7 +217,9 @@ def verify_code():
 
     image_code,verify_str_code = generate_verify()
 
-    print(verify_str_code)
+    print(verify_str_code.lower())
+
+    session['verify_code'] = verify_str_code.lower()
 
     response = make_response(image_code)
 
