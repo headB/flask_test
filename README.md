@@ -206,6 +206,9 @@
         ```
         4. 关于quick.form 我想了解更多！
         5. validators和直接validators。xx有什么区别
+            1. 好像并没有什么区别的，一个是关键字参数，一个是实实在在的模块。
+            2. 关于required，其实是data_required的过去式，其实现在叫,而且，验证是否真的输入数据的话，是最好使用InputRequired去验证。！
+            3. 
 
         6. csrf的具体用法
             1. 在app里面设置 app['SECRET_KEY'],然后在模板里面加入 form.csrf_token()

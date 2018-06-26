@@ -6,8 +6,9 @@ from wtforms import StringField,SubmitField,PasswordField,HiddenField
 #from wtforms import *
 #from flask_wtf import Form
 from flask_wtf import FlaskForm
-from wtforms.validators import Required,EqualTo,data_required
+from wtforms.validators import Required,EqualTo,data_required,input_required,Regexp
 from wtforms import validators
+from wtforms.validators import ValidationError
 
 ##尝试引入flask-script
 #from flask.ext.script import Manager
@@ -109,13 +110,15 @@ def test_no_extends():
 ##测试加入表单,不过表单应该是写在模板里面?
 
 class NameForm(FlaskForm):
-    name = StringField('账号', validators=[validators.DataRequired(message="账号不能为空！")],render_kw={'placeholder':'请输入你的名字!?'})
+    name = StringField('账号', validators=[validators.DataRequired("账号不能为空！"),Regexp(u'lizhixuan',message="对不起，一定要用lizhixuan")],render_kw={'placeholder':'请输入你的名字!?'})
+    # name = StringField('账号', validators=[input_required(message="账号不能为空！")],render_kw={'placeholder':'请输入你的名字!?'})
     password = PasswordField('密码',validators=[Required(),EqualTo('password2')],render_kw={"placeholder":"请输入密码"})
     password2 = PasswordField('验证密码',validators=[Required()],render_kw={"placeholder":"请输入密码"})
     verityCode = StringField('验证码',validators=[Required()],render_kw={"placeholder":"请输入验证码","autocomplete":"off"})
     submit = SubmitField('点击提交!')
 
 class RegisterForm(NameForm):
+    real_name = StringField("测试表单",validators=[validators.DataRequired(message="我是黎智煊")],render_kw={"placeholder":"你想输入什么就输入什么！"})
     submit = SubmitField('点击注册!')
 
 class ModifiedRegister(NameForm):
@@ -137,7 +140,7 @@ def test_form():
         #name = form.name.data
         #form.name.data = ''
         flash("你已经成功提交信息，请稍等！")
-        #return redirect("http://www.baidu.com")
+        
     else:
         flash("欢迎莅临本站点，你是第一次进入，请输入你需要注册的账号和密码！")
     return render_template('test_form.html',name=name,form=form,admin_data=admin_data)
