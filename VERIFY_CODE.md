@@ -171,4 +171,63 @@
         });
         ```
         3. 还缺少一个API
-            1. 
+            1. 通用验证器
+            ```python
+            NAME	    DESCRIPTION
+            between	    Check if the input value is between (strictly or not) two given numbers
+            callback	Check if the input value passes a callback method
+            choice  	Check if the number of checked boxes are less or more than a given number
+            creditCard	Validate a credit card number
+            date	    Validate date
+            different	Check if the input value is different with given value
+            digits  	Check if the value contains only digits
+            emailAddress	Validate an email address
+            file	    Validate a file
+            greaterThan	Check if the value is greater than or equals to given number
+            identical	Check if the value is the same as one of given value
+            integer	    Validate an integer number. Accept both positive and negative number
+            ip	        Validate an IP address. Support both IPv4 and IPv6
+            lessThan	Check if the value is less than or equals to given number
+            notEmpty	Check if the value an is empty string
+            numeric	    Check if the value is numeric
+            promise	    Use Promise to validate value
+            regexp	    Check if the value matches given JavaScript regular expression
+            remote	    Perform remote checking via Ajax request
+            stringCase	Check if a string is a lower or upper case one
+            stringLength	Validate the length of a string
+            uri	        Validate an URL address
+            ```
+
+            2. 特殊验证器
+            ```python
+            NAME	DESCRIPTION
+            base64	Validate a base64 encoded string
+            bic	    Validate a BIC (Business Identifier Codes)
+            color	Validate a color in different formats
+            cusip	Validate a CUSIP
+            ean	    Validate an EAN (International Article Number)
+            ein	    Validate an EIN (Employer Identification Number)
+            grid	Validate a GRId (Global Release Identifier)
+            hex	    Validate a hexadecimal number
+            iban	Validate an International Bank Account Number (IBAN)
+            id	    Validate an identification number
+            imei	Validate an IMEI (International Mobile Station Equipment Identity)
+            imo	    Validate an IMO (International Maritime Organization)
+            isbn	Validate an ISBN (International Standard Book Number). Support both ISBN 10 and ISBN 13
+            isin	Validate an ISIN (International Securities Identification Number)
+            ismn	Validate an ISMN (International Standard Music Number)
+            issn	Validate an ISSN (International Standard Serial Number)
+            mac	    Validate a MAC address
+            meid	Validate a MEID (mobile equipment identifier)
+            phone	Validate a phone number
+            rtn	    Validate a RTN (Routing transit number)
+            sedol	Validate a SEDOL (Stock Exchange Daily Official List)
+            siren	Validate a Siren number
+            siret	Validate a Siret number
+            step	Check if the value is valid step one
+            uuid	Validate an UUID, support v3, v4, v5
+            vat	    Validate VAT number
+            vin	    Validate an US VIN (Vehicle Identification Number)
+            zipCode	Validate a zip code
+
+            ```
