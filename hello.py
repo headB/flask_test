@@ -3,6 +3,8 @@ from flask import Flask,render_template,flash,session
 from flask_bootstrap import Bootstrap
 #from flask.ext.wtf import From 
 from wtforms import StringField,SubmitField,PasswordField,HiddenField
+##导入一个自定义的密码验证类
+from password_extra import return_password,ImgField
 #from wtforms import *
 #from flask_wtf import Form
 from flask_wtf import FlaskForm
@@ -110,28 +112,36 @@ def test_no_extends():
 ##测试加入表单,不过表单应该是写在模板里面?
 
 class NameForm(FlaskForm):
-    name = StringField('账号', validators=[validators.DataRequired("账号不能为空！"),Regexp(u'lizhixuan',message="对不起，一定要用lizhixuan")],render_kw={'placeholder':'请输入你的名字!?'})
-    # name = StringField('账号', validators=[input_required(message="账号不能为空！")],render_kw={'placeholder':'请输入你的名字!?'})
-    password = PasswordField('密码',validators=[Required(),EqualTo('password2')],render_kw={"placeholder":"请输入密码"})
-    password2 = PasswordField('验证密码',validators=[Required()],render_kw={"placeholder":"请输入密码"})
-    verityCode = StringField('验证码',validators=[Required()],render_kw={"placeholder":"请输入验证码","autocomplete":"off"})
+
+    name = StringField('账号', validators=[input_required(message="账号不能为空！")],render_kw={'placeholder':'请输入你的名字!?'})
+    password = return_password('密码',validators=[Required(),EqualTo('password2')],render_kw={"placeholder":"请输入密码"})
+    password2 = return_password('再输入一次密码',validators=[Required()],render_kw={"placeholder":"请输入密码"})
+      
     submit = SubmitField('点击提交!')
 
 class RegisterForm(NameForm):
-    real_name = StringField("测试表单",validators=[validators.DataRequired(message="我是黎智煊")],render_kw={"placeholder":"你想输入什么就输入什么！"})
-    submit = SubmitField('点击注册!')
-
-class ModifiedRegister(NameForm):
-    #id = HiddenField()
-    password = PasswordField('密码',validators=[EqualTo('password2')],render_kw={"placeholder":"不输入就表示不修改密码"})
-    password2 = PasswordField('验证密码',validators=[],render_kw={"placeholder":"请输入密码"})
+    
+     ##定义一个验证码变量
+    #需要定义一个初始方法？
+    
     verityCode = StringField('验证码',validators=[Required()],render_kw={"placeholder":"请输入验证码","autocomplete":"off"})
+    #添加一个自定义的ImgField
+    #img1 = ImgField("点击图片可以切换验证码！%s"%verify_code_str,validators=[Regexp(,message="验证码错误！")],render_kw={'style':'width:150px;height:50px','src':"/verify_code",'id':"verifty_code"})
+    #img1 = ImgField("点击图片可以切换验证码！",render_kw={'style':'width:150px;height:50px','src':"/verify_code",'id':"verifty_code"})
+    submit = SubmitField('点击注册!')
+    
+class ModifiedRegister(NameForm):
+    id = HiddenField()
+    password = return_password('密码',validators=[EqualTo('password2')],render_kw={"placeholder":"不输入就表示不修改密码"})
+    password2 = return_password('再输入一次密码',validators=[],render_kw={"placeholder":"请输入密码"})
+    #verityCode = StringField('验证码',validators=[Required()],render_kw={"placeholder":"请输入验证码","autocomplete":"off"})
     submit = SubmitField('点击修改!')
 
 @app.route("/test_form",methods=['GET','POST'])
 def test_form():  
     name = None
     form = NameForm()
+    
 
     ##获取指定admin表的数据。
     admin_data = Admin().query.all()
@@ -149,7 +159,10 @@ def test_form():
 ##比较贪心，不过这里顺便设置一个如果获取到id，意味着需要修改对应id的数据。！
 @app.route('/register',methods=['GET','POST'])
 def register_form():
-    form = RegisterForm()
+    #每次都将验证码信息写入到字段里面
+    form = RegisterForm(session.get('verify_code'))
+    #print(session.get('verify_code'))
+
     id = request.args.get('id')
     if id:
         
@@ -175,6 +188,11 @@ def register_form():
 
         id = request.form.get("id")
 
+        ##检查验证码
+        # if session.get('verify_code'):
+        #     if request.form.get('verifyCode'):
+        #         if session.get('verify_code') != request.form.get('verifyCode'):
+        #             return "{'result':'error'}"
 
         if id:
             admins.name = form.name.data
@@ -201,6 +219,7 @@ def register_form():
 ##查看用户表数据
 @app.route("/user",methods=['GET','POST'])
 def user():
+    
     id = request.args.get('id')
     if id:
         object1 = Admin().query.filter_by(id=id).first()
@@ -219,8 +238,6 @@ def verify_code():
     from flask import make_response
 
     image_code,verify_str_code = generate_verify()
-
-    print(verify_str_code.lower())
 
     session['verify_code'] = verify_str_code.lower()
 

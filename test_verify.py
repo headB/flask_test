@@ -41,7 +41,7 @@ def generate_verify():
         str1 += text
         #这里第一格参数给定left，top的距离坐标，然后还有内容！。
         #draw.text((0+20*x,30), text=text, fill='black',font=font )
-        draw.text((5+random.randint(4,7)+20*x,5+random.randint(3,7)), text=text, fill=(255,random.randint(0,255),random.randint(0,255)),font=font )
+        draw.text((5+random.randint(4,7)+20*x,5+random.randint(1,3)), text=text, fill=(255,random.randint(0,255),random.randint(0,255)),font=font )
     
     #draw.text((0,1),text=str1,fill='black',font=font )
 
