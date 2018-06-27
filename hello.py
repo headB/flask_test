@@ -121,14 +121,7 @@ class NameForm(FlaskForm):
 
 class RegisterForm(NameForm):
     
-     ##定义一个验证码变量
-    #需要定义一个初始方法？
-    
-    verityCode = StringField('验证码',validators=[Required()],render_kw={"placeholder":"请输入验证码","autocomplete":"off"})
-    #添加一个自定义的ImgField
-    #img1 = ImgField("点击图片可以切换验证码！%s"%verify_code_str,validators=[Regexp(,message="验证码错误！")],render_kw={'style':'width:150px;height:50px','src':"/verify_code",'id':"verifty_code"})
-    img1 = ImgField("点击图片可以切换验证码！",render_kw={'style':'width:150px;height:50px','src':"/verify_code",'id':"verifty_code"})
-    submit = SubmitField('点击注册!')
+     pass
     
 class ModifiedRegister(NameForm):
     id = HiddenField()
@@ -138,10 +131,10 @@ class ModifiedRegister(NameForm):
     submit = SubmitField('点击修改!')
 
 @app.route("/test_form",methods=['GET','POST'])
-def test_form():  
+def test_form():
+    
     name = None
     form = NameForm()
-    
 
     ##获取指定admin表的数据。
     admin_data = Admin().query.all()
@@ -159,14 +152,21 @@ def test_form():
 ##比较贪心，不过这里顺便设置一个如果获取到id，意味着需要修改对应id的数据。！
 @app.route('/register',methods=['GET','POST'])
 def register_form():
+
+    class NameTestForm(RegisterForm):
+        verityCode = StringField('验证码',validators=[Required(),Regexp(session.get('verify_code'),message="验证码错误！")],render_kw={"placeholder":"请输入验证码","autocomplete":"off"})
+        img1 = ImgField("点击图片切换验证码,不区分大小写！",render_kw={'style':'width:150px;height:50px','src':"/verify_code",'id':"verifty_code"})
+        submit = SubmitField('点击注册!')
+
     #每次都将验证码信息写入到字段里面
-    form = RegisterForm()
+    form = NameTestForm()
+    
     #print(session.get('verify_code'))
 
-    id = request.args.get('id')
-    if id:
+    id1 = request.args.get('id')
+    if id1:
         
-        admins = Admin().query.filter_by(id=id).first()
+        admins = Admin().query.filter_by(id=id1).first()
 
         form = ModifiedRegister()
 
@@ -186,15 +186,9 @@ def register_form():
     if form.validate_on_submit():
         #检测已经提交表单，检查参数
 
-        id = request.form.get("id")
+        id1 = request.form.get("id")
 
-        ##检查验证码
-        # if session.get('verify_code'):
-        #     if request.form.get('verifyCode'):
-        #         if session.get('verify_code') != request.form.get('verifyCode'):
-        #             return "{'result':'error'}"
-
-        if id:
+        if id1:
             admins.name = form.name.data
             if request.form.get("password"):
                 admins.password = request.form.get("password")
