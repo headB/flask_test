@@ -127,7 +127,7 @@ class RegisterForm(NameForm):
     verityCode = StringField('验证码',validators=[Required()],render_kw={"placeholder":"请输入验证码","autocomplete":"off"})
     #添加一个自定义的ImgField
     #img1 = ImgField("点击图片可以切换验证码！%s"%verify_code_str,validators=[Regexp(,message="验证码错误！")],render_kw={'style':'width:150px;height:50px','src':"/verify_code",'id':"verifty_code"})
-    #img1 = ImgField("点击图片可以切换验证码！",render_kw={'style':'width:150px;height:50px','src':"/verify_code",'id':"verifty_code"})
+    img1 = ImgField("点击图片可以切换验证码！",render_kw={'style':'width:150px;height:50px','src':"/verify_code",'id':"verifty_code"})
     submit = SubmitField('点击注册!')
     
 class ModifiedRegister(NameForm):
@@ -160,7 +160,7 @@ def test_form():
 @app.route('/register',methods=['GET','POST'])
 def register_form():
     #每次都将验证码信息写入到字段里面
-    form = RegisterForm(session.get('verify_code'))
+    form = RegisterForm()
     #print(session.get('verify_code'))
 
     id = request.args.get('id')
