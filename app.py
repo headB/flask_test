@@ -33,6 +33,12 @@ from flask import session,redirect,url_for,flash
 
 ##创建一个Flask示例,并且给定初始化参数
 app = Flask(__name__)
+
+##我记得是现在注册蓝图
+from register import register as blue_register
+app.register_blueprint(blue_register)
+
+
 ##需要全局设置一个csrf
 app.config['SECRET_KEY'] = 'hard to guess string'
 
@@ -45,8 +51,9 @@ nav = Nav()
 nav.register_element('top',Navbar(u'flask入门',View(u'你好','test_templates'),
 View(u'栏目测试','test_base'),
 View(u'测试表单 ','test_form'),
-View(u'点击注册 ','register_form'),
+View(u'点击注册测试 ','register_form'),
 View(u'查看用户 ','user'),
+View(u'真正的注册用户 ','register'),
 ))
 
 ##初始化一个nav
@@ -208,7 +215,7 @@ def register_form():
         #return render_template("user.html")
         return redirect(url_for('user'))
     else:
-        return render_template('register.html',form=form,operate="注册")
+        return render_template('register_1.html',form=form,operate="注册")
 
 ##查看用户表数据
 @app.route("/user",methods=['GET','POST'])
@@ -240,6 +247,24 @@ def verify_code():
     response.headers['Content-Type'] = "image/gif"
     
     return response
+
+@app.route('/register/index',methods=['GET','POST'])
+def register():
+
+    class register_form(FlaskForm):
+
+        name = StringField('登录名',render_kw={'placeholder':'请输入你想设置的登录名'})
+        password = return_password("密码",render_kw={'placeholder':'请输入含有大、小写字母加数字的密码组合'})
+        password1 = return_password("密码",render_kw={'placeholder':'再次确认密码'})
+        email = StringField("邮箱",render_kw={'placeholder':'请输入你的公司邮箱地址'})
+        register_code = StringField("注册码",render_kw={'placeholder':'请输入你邮箱收到的注册码'})
+        submit = SubmitField("点击提交")
+
+    register = register_form()
+
+    return render_template('register.html',form=register)
+
+
 
 
 if __name__ == "__main__":
